@@ -9,6 +9,8 @@ import kotlinx.android.synthetic.main.activity_list.*
 /**
  * Created by kvest on 7/11/2017.
  */
+private const val LIST_ITEMS_COUNT = 1_000
+
 class ListActivity : AppCompatActivity() {
     val adapter by lazy { ListAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +28,7 @@ class ListActivity : AppCompatActivity() {
         adapter.items = provideItems()
     }
 
-    private fun provideItems(): List<Item> = List<Item>(10) {
-        i -> Item(System.nanoTime() % 100_000, "Item $i")
+    private fun provideItems(): List<Item> = List<Item>(LIST_ITEMS_COUNT) {
+        i -> Item(i, "Item ${System.nanoTime() % 100_000}")
     }
 }
