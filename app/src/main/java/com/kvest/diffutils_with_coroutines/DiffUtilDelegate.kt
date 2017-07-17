@@ -6,6 +6,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -19,6 +20,7 @@ class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
                           initialValue: List<T>,
                           val calculateDiffContext: CoroutineContext = CommonPool,
                           val itemsTheSameComparator: ItemsTheSameComparator<T>) : ReadWriteProperty<Any?, List<T>> {
+    private val TAG = "DiffUtilDelegate"
     private var items = initialValue
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): List<T> {
@@ -28,6 +30,7 @@ class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
     override fun setValue(thisRef: Any?, property: KProperty<*>, newItems: List<T>) {
         launch (UI) {
             val diff = async(calculateDiffContext) {
+                Log.d(TAG, "Start calculateDiff in ${Thread.currentThread().name}");
                 DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
                             itemsTheSameComparator(items[oldItemPosition], newItems[newItemPosition])
@@ -44,6 +47,8 @@ class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
                     }
                 })
             }.await()
+
+            Log.d(TAG, "Set items in ${Thread.currentThread().name}");
 
             items = newItems
             diff.dispatchUpdatesTo(adapter)

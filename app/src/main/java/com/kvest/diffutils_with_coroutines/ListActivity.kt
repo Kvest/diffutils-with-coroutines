@@ -16,7 +16,7 @@ import kotlinx.coroutines.experimental.android.UI
 /**
  * Created by kvest on 7/11/2017.
  */
-private const val LIST_ITEMS_COUNT = 100_000
+private const val LIST_ITEMS_COUNT = 10_000
 private const val ITEMS_COUNT_TO_SHUFFLE = 10
 
 class ListActivity : AppCompatActivity() {
