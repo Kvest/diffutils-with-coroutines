@@ -11,3 +11,9 @@ import android.view.ViewGroup
 fun ViewGroup.inflateWithoutAttach(@LayoutRes layoutRes: Int): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, false)
 }
+
+fun <T> MutableList<T>.swap(i: Int, j: Int) {
+    val tmp = this[i]
+    this[i] = this[j]
+    this[j] = tmp
+}

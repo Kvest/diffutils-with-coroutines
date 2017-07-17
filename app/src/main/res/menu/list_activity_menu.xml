@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/delete_first_item"
+        android:title="Delete first"
+        android:orderInCategory="100"
+        app:showAsAction="never|withText" />
+    <item
+        android:id="@+id/update_names"
+        android:title="Update names"
+        android:orderInCategory="100"
+        app:showAsAction="never|withText" />
+    <item
+        android:id="@+id/shuffle_items"
+        android:title="Shuffle items"
+        android:orderInCategory="100"
+        app:showAsAction="never|withText" />
+</menu>

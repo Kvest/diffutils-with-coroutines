@@ -27,7 +27,14 @@ dependencies {
     compile "com.android.support:appcompat-v7:$support_lib_version"
     compile "com.android.support:design:$support_lib_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 }
 repositories {
     mavenCentral()
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }

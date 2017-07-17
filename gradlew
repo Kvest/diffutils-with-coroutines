@@ -12,7 +12,7 @@ DEFAULT_JVM_OPTS=""
 APP_NAME="Gradle"
 APP_BASE_NAME=`basename "$0"`
 
-# Use the maximum available, or set MAX_FD != -1 to use that value.
+# Use the maximum available, or set MAX_FD != -1 to use that items.
 MAX_FD="maximum"
 
 warn ( ) {
@@ -150,7 +150,7 @@ if $cygwin ; then
     esac
 fi
 
-# Split up the JVM_OPTS And GRADLE_OPTS values into an array, following the shell quoting and substitution rules
+# Split up the JVM_OPTS And GRADLE_OPTS items into an array, following the shell quoting and substitution rules
 function splitJvmOpts() {
     JVM_OPTS=("$@")
 }
