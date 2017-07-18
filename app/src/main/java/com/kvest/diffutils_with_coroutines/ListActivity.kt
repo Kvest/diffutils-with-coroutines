@@ -56,6 +56,7 @@ class ListActivity : AppCompatActivity() {
             R.id.delete_first_item -> deleteFirstItem()
             R.id.update_names -> updateNames()
             R.id.shuffle_items -> shuffleItems()
+            R.id.multi_change -> multiChange()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -98,6 +99,26 @@ class ListActivity : AppCompatActivity() {
             }.await()
 
             adapter.items = newItems
+        }
+    }
+
+    private fun multiChange() {
+        launch(UI){
+            val items = async(CommonPool) {
+                val firstItems = List(100) {
+                    i -> Item(i, "Item ${System.nanoTime() % LIST_ITEMS_COUNT}")
+                }
+
+                val secondItems = List(10000) {
+                    i -> Item(i, "Item ${System.nanoTime() % LIST_ITEMS_COUNT}")
+                }
+
+                Pair(firstItems, secondItems)
+            }.await()
+
+            adapter.items = items.first
+            adapter.items = emptyList()
+            adapter.items = items.second
         }
     }
 
