@@ -16,6 +16,9 @@ import kotlin.reflect.KProperty
  * Created by kvest on 7/17/2017.
  */
 typealias ItemsTheSameComparator<T> = (T, T) -> Boolean
+interface ChangePayloadCalculator {
+    fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any?
+}
 
 class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
                           initialValue: List<T>,
@@ -28,6 +31,12 @@ class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
             calculateDiff(event)
         }
     }
+    private val changePayloadCalculator: ChangePayloadCalculator? =
+            if (adapter is ChangePayloadCalculator) {
+                adapter
+            } else {
+                null
+            }
 
     private suspend fun calculateDiff(newItems: List<T>) {
         val diff = async(calculateDiffContext) {
@@ -45,6 +54,14 @@ class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
 
                 override fun getNewListSize(): Int {
                     return newItems.size
+                }
+
+                override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+                    changePayloadCalculator?.let {
+                        return changePayloadCalculator.getChangePayload(oldItemPosition, newItemPosition)
+                    }
+
+                    return super.getChangePayload(oldItemPosition, newItemPosition)
                 }
             })
         }.await()

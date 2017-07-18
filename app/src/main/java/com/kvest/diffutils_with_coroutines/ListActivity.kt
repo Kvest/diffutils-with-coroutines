@@ -80,7 +80,14 @@ class ListActivity : AppCompatActivity() {
     private fun updateNames() {
         launch(UI) {
             val newItems = async(CommonPool) {
-                adapter.items.map { item -> item.copy(name = "Item ${System.nanoTime() % LIST_ITEMS_COUNT}") }
+                val newItems = adapter.items.toMutableList()
+                with (recycler.layoutManager as LinearLayoutManager) {
+                    for (i in findFirstVisibleItemPosition()..findLastVisibleItemPosition()) {
+                        newItems[i] = adapter.items[i].copy(name = "Item ${System.nanoTime() % LIST_ITEMS_COUNT}")
+                    }
+                }
+
+                newItems
             }.await()
 
             adapter.items = newItems
