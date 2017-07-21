@@ -1,4 +1,4 @@
-package com.kvest.diffutils_with_coroutines
+package diffutils_with_coroutines
 
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater

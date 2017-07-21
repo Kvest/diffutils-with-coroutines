@@ -1,4 +1,4 @@
-package com.kvest.diffutils_with_coroutines
+package diffutils_with_coroutines
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
+import com.kvest.diffutils_with_coroutines.R
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI

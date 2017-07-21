@@ -1,8 +1,9 @@
-package com.kvest.diffutils_with_coroutines
+package diffutils_with_coroutines
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.kvest.diffutils_with_coroutines.R
 import kotlinx.android.synthetic.main.list_item.view.*
 
 /**
