@@ -76,7 +76,7 @@ class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
         return items
     }
 
-    override fun setValue(thisRef: Any?, property: KProperty<*>, newItems: List<T>) {
-        newItemsActor.offer(newItems)
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: List<T>) {
+        newItemsActor.offer(value)
     }
 }

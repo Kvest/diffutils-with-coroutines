@@ -17,24 +17,24 @@ class BlockingDiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
         return items
     }
 
-    override fun setValue(thisRef: Any?, property: KProperty<*>, newItems: List<T>) {
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: List<T>) {
         val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                    itemsTheSameComparator(items[oldItemPosition], newItems[newItemPosition])
+                    itemsTheSameComparator(items[oldItemPosition], value[newItemPosition])
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                    items[oldItemPosition] == newItems[newItemPosition]
+                    items[oldItemPosition] == value[newItemPosition]
 
             override fun getOldListSize(): Int {
                 return items.size
             }
 
             override fun getNewListSize(): Int {
-                return newItems.size
+                return value.size
             }
         })
 
-        items = newItems
+        items = value
         diff.dispatchUpdatesTo(adapter)
     }
 }
