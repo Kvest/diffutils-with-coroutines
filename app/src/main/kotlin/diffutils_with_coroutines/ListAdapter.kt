@@ -14,7 +14,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ViewHolder>() {
         (oldId), (newId) -> oldId == newId
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             = ViewHolder(parent.inflateWithoutAttach(R.layout.list_item))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =  holder.bind(items[position])
