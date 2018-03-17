@@ -10,7 +10,9 @@ import kotlin.reflect.KProperty
  */
 class BlockingDiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
                                   private var items: List<T>,
-                                  val itemsTheSameComparator: (T, T) -> Boolean) : ReadWriteProperty<Any?, List<T>> {
+                                  val itemsTheSameComparator: (T, T) -> Boolean)
+        : ReadWriteProperty<Any?, List<T>> {
+
     override fun getValue(thisRef: Any?, property: KProperty<*>): List<T> {
         return items
     }

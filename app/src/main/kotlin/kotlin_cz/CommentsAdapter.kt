@@ -8,7 +8,9 @@ import diffutils_with_coroutines.DiffUtilDelegate
 /**
  * Created by kvest on 3/17/18.
  */
-class CommentsAdapter(initialCommentsList: List<CommentItem>) : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
+class CommentsAdapter(initialCommentsList: List<CommentItem>)
+        : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
+
     var items: List<CommentItem> by DiffUtilDelegate(this, initialCommentsList) {
         //newItem, oldItem -> newItem.id == oldItem.id
         (oldId), (newId) -> oldId == newId
