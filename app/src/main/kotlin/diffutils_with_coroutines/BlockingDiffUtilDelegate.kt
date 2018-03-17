@@ -10,7 +10,7 @@ import kotlin.reflect.KProperty
  */
 class BlockingDiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
                                    initialValue: List<T>,
-                                   val itemsTheSameComparator: ItemsTheSameComparator<T>) : ReadWriteProperty<Any?, List<T>> {
+                                   val itemsTheSameComparator: (T, T) -> Boolean) : ReadWriteProperty<Any?, List<T>> {
     private var items = initialValue
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): List<T> {
@@ -19,19 +19,15 @@ class BlockingDiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: List<T>) {
         val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
                     itemsTheSameComparator(items[oldItemPosition], value[newItemPosition])
 
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
                     items[oldItemPosition] == value[newItemPosition]
 
-            override fun getOldListSize(): Int {
-                return items.size
-            }
+            override fun getOldListSize() = items.size
 
-            override fun getNewListSize(): Int {
-                return value.size
-            }
+            override fun getNewListSize() = value.size
         })
 
         items = value

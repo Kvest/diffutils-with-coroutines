@@ -15,7 +15,6 @@ import kotlin.reflect.KProperty
 /**
  * Created by kvest on 7/17/2017.
  */
-typealias ItemsTheSameComparator<T> = (T, T) -> Boolean
 interface ChangePayloadCalculator {
     fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any?
 }
@@ -23,7 +22,7 @@ interface ChangePayloadCalculator {
 class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
                           initialValue: List<T>,
                           val calculateDiffContext: CoroutineContext = CommonPool,
-                          val itemsTheSameComparator: ItemsTheSameComparator<T>) : ReadWriteProperty<Any?, List<T>> {
+                          val itemsTheSameComparator: (T, T) -> Boolean) : ReadWriteProperty<Any?, List<T>> {
     private val TAG = "DiffUtilDelegate"
     private var items = initialValue
     private val newItemsActor = actor<List<T>>(UI, capacity = Channel.CONFLATED) {
@@ -31,38 +30,24 @@ class DiffUtilDelegate<T>(val adapter: RecyclerView.Adapter<*>,
             calculateDiff(event)
         }
     }
-    private val changePayloadCalculator: ChangePayloadCalculator? =
-            if (adapter is ChangePayloadCalculator) {
-                adapter
-            } else {
-                null
-            }
+    private val changePayloadCalculator = adapter as? ChangePayloadCalculator
 
     private suspend fun calculateDiff(newItems: List<T>) {
         val diff = async(calculateDiffContext) {
             Log.d(TAG, "Start calculateDiff in ${Thread.currentThread().name} ${items.size} -> ${newItems.size}");
             DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
                         itemsTheSameComparator(items[oldItemPosition], newItems[newItemPosition])
 
-                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
                         items[oldItemPosition] == newItems[newItemPosition]
 
-                override fun getOldListSize(): Int {
-                    return items.size
-                }
+                override fun getOldListSize() = items.size
 
-                override fun getNewListSize(): Int {
-                    return newItems.size
-                }
+                override fun getNewListSize() = newItems.size
 
-                override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-                    changePayloadCalculator?.let {
-                        return changePayloadCalculator.getChangePayload(oldItemPosition, newItemPosition)
-                    }
-
-                    return super.getChangePayload(oldItemPosition, newItemPosition)
-                }
+                override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int) =
+                    changePayloadCalculator?.getChangePayload(oldItemPosition, newItemPosition)
             })
         }.await()
 
