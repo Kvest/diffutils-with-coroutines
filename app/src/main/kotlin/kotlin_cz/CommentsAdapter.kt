@@ -12,8 +12,8 @@ class CommentsAdapter(initialCommentsList: List<CommentItem>)
         : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
 
     var items: List<CommentItem> by DiffUtilDelegate(this, initialCommentsList) {
-        //newItem, oldItem -> newItem.id == oldItem.id
-        (oldId), (newId) -> oldId == newId
+        newItem, oldItem -> newItem.id == oldItem.id
+        //(oldId), (newId) -> oldId == newId
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {

@@ -72,7 +72,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+            CommentItem oldItem = oldList.get(oldItemPosition);
+            CommentItem newItem = newList.get(newItemPosition);
+
+            return oldItem.equals(newItem);
         }
 
         @Override
