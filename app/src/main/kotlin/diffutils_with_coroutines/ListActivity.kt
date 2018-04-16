@@ -9,6 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
+import android.widget.Toast
+import com.kvest.diffutils_with_coroutines.BR
 import com.kvest.diffutils_with_coroutines.R
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.coroutines.experimental.*
@@ -20,8 +22,8 @@ import kotlinx.coroutines.experimental.android.UI
 private const val LIST_ITEMS_COUNT = 10_000
 private const val ITEMS_COUNT_TO_SHUFFLE = 10
 
-class ListActivity : AppCompatActivity() {
-    val adapter by lazy { ListAdapter() }
+class ListActivity : AppCompatActivity(), ItemHandler {
+    val adapter by lazy { ListAdapter(this) }
     private lateinit var animator: ObjectAnimator
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +65,10 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun initList() {
+        adapter.holderInit = {
+            setVariable(BR.handler, this@ListActivity)
+        }
+
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = adapter
         recycler.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
@@ -71,6 +77,14 @@ class ListActivity : AppCompatActivity() {
             val items = provideItems().await()
             adapter.items = items
         }
+    }
+
+    override fun onItemSelected(item: Item) {
+        Toast.makeText(this, "Item selected ${item.name}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onIdSelected(id: Int) {
+        Toast.makeText(this, "Id selected ${id}", Toast.LENGTH_SHORT).show()
     }
 
     private fun deleteFirstItem() {
